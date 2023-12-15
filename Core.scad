@@ -1,5 +1,5 @@
 /*
- *Creates the parts to build a 12V battery in a 30 Calibur ammo can.
+ *Creates the parts to build a 12V battery in a 30 Caliber ammo can.
  *This design is 60 Cells Maximum in a 6 high configuration, my Cells are 20mm diameter.
  *the front should be modified into an "H"  if significantly less cells are used. this would give a pocket for more storage 
 */
@@ -98,9 +98,27 @@ difference(){
         if(Render_Spacer_Bottom)
             translate([((Cell_Diameter+Cell_Spacing)*(Core_Columns-1))-(Cell_Diameter/2)-Pack_Padding,-(Cell_Diameter/2)-Pack_Padding,Strap_Bot_Z-Side_Thickness])
             rounded_4s_Cube([(Cell_Diameter)+(Pack_Padding*2), ((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],5);
-
-        if(Render_Front)
+        if(Render_PCB_Shield)
+        {
             translate([-(Cell_Diameter/2)-Pack_Padding-Pack_Padding,-(Cell_Diameter/2)-Pack_Padding,0]){
+                        
+                        translate([0,0,-Cell_Lenght/2-Strap_Thickness])
+                        difference()
+                        {
+                            rounded_4s_Cube([Pack_Padding*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)],5);
+                            translate([Pack_Padding,0,0])cube([Pack_Padding,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)]);
+                        }
+            }
+
+        }
+        if(Render_Front)
+        {
+            //Whelp Lets figure out overall 
+            Cell_Holder_Lenght = ((Cell_Diameter+Cell_Spacing)*Core_Columns)-Cell_Spacing+Pack_Padding+Pack_Padding;
+            Front_Diff = Pack_Width - Cell_Holder_Lenght;
+            echo(Cell_Holder_Lenght = Cell_Holder_Lenght);
+            echo(Front_Diff = Front_Diff);
+            translate([-(Cell_Diameter/2)-Pack_Padding-Front_Diff,-(Cell_Diameter/2)-Pack_Padding,0]){
                 
                 translate([0,0,-Cell_Lenght/2-Strap_Thickness])
                 difference()
@@ -108,9 +126,10 @@ difference(){
                     rounded_4s_Cube([Pack_Padding*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)],5);
                     translate([Pack_Padding,0,0])cube([Pack_Padding,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)]);
                 }
-                translate([0,0,Strap_Top_Z+Strap_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],5);
+                color(c = "brown") translate([0,0,Strap_Top_Z+Strap_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],5);
                 translate([0,0,Strap_Bot_Z-Side_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],5);
             }
+        }
 /*
         
         Render_Spacer_Bottom = true;
