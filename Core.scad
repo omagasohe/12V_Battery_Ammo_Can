@@ -51,7 +51,7 @@
     Wire_Diameter = 5;
 
 /* [Fasteners] */
-    
+    Heat_Insert_In_Shield = false;
     // this should be the smooth part before the fins. your looking to have the insert just barely get in the hole 
     Heat_Insert_Diameter = 4.2;
     // 
@@ -245,6 +245,8 @@ difference(){
                 cylinder(h=Heat_Insert_Height, d = Heat_Insert_Diameter,$fn = 36);
                 translate([0,0,Heat_Insert_Height-Screw_Thread_Length+Screw_Pocket_Z])cylinder(h=Screw_Thread_Length,d=Heat_Insert_Thread*1.1,$fn = 36);
                 translate([0,0,Screw_Pocket_Z+Heat_Insert_Height])cylinder(h=Side_Thickness-Screw_Pocket_Z+.01,d=Screw_Head_Diameter*1.1,$fn=36);
+                if(Heat_Insert_In_Shield)
+                    translate([0,0,-Strap_Thickness-Pack_Padding_Cell_Side]) cylinder(h=Heat_Insert_Height, d = Heat_Insert_Diameter,$fn = 36);
                 }
         
     }
