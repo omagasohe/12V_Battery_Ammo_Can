@@ -56,11 +56,11 @@
     Heat_Insert_Diameter = 4.2;
     // 
     Heat_Insert_Height = 5;
-    Heat_Insert_Thread = 3;
+    Heat_Insert_Thread = 3.3;
 
 
     Screw_Head_Diameter = 7;
-    Screw_Thread_Length = 5.7;
+    Screw_Thread_Length = 20;
     Screw_Head_Height = 2;
 
 
@@ -140,7 +140,20 @@ difference(){
                         rounded_4s_Cube([Pack_Padding*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght-(Pack_Padding_Cell_Side*2)],Corner_Radius);
                         translate([Pack_Padding,0,-0.01])cube([Pack_Padding+0.02,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght-(Pack_Padding_Cell_Side*2)+0.02]);
                     }
+                   
+                translate([Pack_Padding,0,-Cell_Lenght/2+Pack_Padding_Cell_Side])
+                    difference() {
+                    cube([Cell_Diameter/2,Cell_Diameter/2+Pack_Padding,Cell_Lenght-(Pack_Padding_Cell_Side*2)]);
+                    translate([Cell_Diameter/2,Cell_Diameter/2+Pack_Padding,-0.01]) cylinder(h = Cell_Lenght-(Pack_Padding_Cell_Side*2) + 0.02, d=Cell_Diameter+Cell_Spacing);
+                    }
+                translate([Pack_Padding,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding-(Cell_Diameter/2),-Cell_Lenght/2+Pack_Padding_Cell_Side])
+                   difference() {
+                    cube([Cell_Diameter/2,Cell_Diameter/2+Pack_Padding,Cell_Lenght-(Pack_Padding_Cell_Side*2)]);
+                    translate([Cell_Diameter/2,0,-0.01]) cylinder(h = Cell_Lenght-(Pack_Padding_Cell_Side*2) + 0.02, d=Cell_Diameter+Cell_Spacing);
+                    }
+
             }
+
 
         }
         if(Render_Front){
