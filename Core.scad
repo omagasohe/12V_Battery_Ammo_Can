@@ -162,7 +162,6 @@ difference(){
             difference() 
             {
                 translate([-(Cell_Diameter/2)-Pack_Padding-Front_Diff,-(Cell_Diameter/2)-Pack_Padding,0]){
-                    
                     translate([0,0,-Cell_Lenght/2-Strap_Thickness])
                     difference()
                     {
@@ -172,24 +171,17 @@ difference(){
                     translate([0,0,Strap_Top_Z+Strap_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
                     translate([0,0,Strap_Bot_Z-Side_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
                 }
-
-                translate([-(Cell_Diameter/2)-Pack_Padding-Front_Diff+Corner_Radius-.01,-(Cell_Diameter/2)-Pack_Padding,Strap_Top_Z+Side_Thickness+Strap_Thickness-Corner_Radius+0.01]) 
-                    rotate([-90,180,0]) 
-                        difference() 
-                        {
-                            cube([Corner_Radius,Corner_Radius,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding]);
-                            translate([0,0,-0.01]) 
-                            cylinder(h=((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding+0.02, r=Corner_Radius);
-                        }
-
-                translate([-(Cell_Diameter/2)-Pack_Padding+Corner_Radius-Front_Diff-.01,-(Cell_Diameter/2)-Pack_Padding-0.01,Strap_Bot_Z-Side_Thickness+Corner_Radius-0.01]) 
-                    rotate([-90,90,0]) 
-                        difference() 
-                        {
-                            cube([Corner_Radius,Corner_Radius,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding]);
-                            translate([0,0,-0.01]) 
-                            cylinder(h=((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding+0.02, r=Corner_Radius);
-                        }
+                //round top and bottom
+                for(i = [[180,Strap_Top_Z+Side_Thickness+Strap_Thickness-Corner_Radius+0.01],
+                         [90,Strap_Bot_Z-Side_Thickness+Corner_Radius-0.01]])
+                    translate([-(Cell_Diameter/2)-Pack_Padding-Front_Diff+Corner_Radius-.01,-(Cell_Diameter/2)-Pack_Padding,i[1]]) 
+                        rotate([-90,i[0],0]) 
+                            difference() 
+                            {
+                                cube([Corner_Radius,Corner_Radius,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding]);
+                                translate([0,0,-0.01]) 
+                                cylinder(h=((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding+0.02, r=Corner_Radius);
+                            }
             }        
         }
     }
