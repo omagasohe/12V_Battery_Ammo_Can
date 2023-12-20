@@ -72,7 +72,7 @@
     Core_Rows = 6; //Dont change this.
     //Thickness of the Side Covers
     Side_Thickness = (Pack_Depth - (Cell_Lenght+(Strap_Thickness*2)))/2;
-
+    
     //Make sure we use the larger of the pack padding or the indent
     Pack_Padding_Bottom = Pack_Indent < Pack_Padding ? Pack_Padding : Pack_Indent;
 
@@ -95,8 +95,8 @@ include <Core_Helper_Routines.scad>
 
 difference(){
     union()
-    {
-        if(Render_Top_Cell_Holder)
+    {  
+        if(Render_Top_Cell_Holder) 
             translate([-(Cell_Diameter/2)-Pack_Padding,-(Cell_Diameter/2)-Pack_Padding,Strap_Top_Z-Pack_Padding_Cell_Side])
             rounded_4s_Cube([((Cell_Diameter+Cell_Spacing)*Core_Columns)-Cell_Spacing+Pack_Padding+Pack_Padding, ((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Pack_Padding_Cell_Side+Strap_Thickness],Corner_Radius);
 
@@ -168,8 +168,8 @@ difference(){
                         rounded_4s_Cube([Pack_Padding*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)],Corner_Radius);
                         translate([Pack_Padding,0,0])cube([Pack_Padding+0.01,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Cell_Lenght+(Strap_Thickness*2)]);
                     }
-                    translate([0,0,Strap_Top_Z+Strap_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
-                    translate([0,0,Strap_Bot_Z-Side_Thickness])rounded_4s_Cube([Cell_Diameter+(Pack_Padding*2),((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
+                    translate([0,0,Strap_Top_Z+Strap_Thickness])rounded_4s_Cube([(Cell_Diameter+Pack_Padding)*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
+                    translate([0,0,Strap_Bot_Z-Side_Thickness]) rounded_4s_Cube([(Cell_Diameter+Pack_Padding)*2,((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
                 }
                 //round top and bottom
                 for(i = [[180,Strap_Top_Z+Side_Thickness+Strap_Thickness-Corner_Radius+0.01],
@@ -240,6 +240,16 @@ difference(){
                 if(Heat_Insert_In_Shield)
                     translate([0,0,-Strap_Thickness-Pack_Padding_Cell_Side]) cylinder(h=Heat_Insert_Height, d = Heat_Insert_Diameter,$fn = 36);
                 }
+        for(xy = [[0,(-Cell_Diameter/2)-Pack_Padding+Heat_Insert_Height],
+                  [(Cell_Diameter+Cell_Spacing)*(Core_Columns-1),(-Cell_Diameter/2)-Pack_Padding+Heat_Insert_Height],
+                 ], z = [((Cell_Lenght/2+Strap_Thickness+Side_Thickness/2)),-Cell_Lenght/2-Strap_Thickness-Side_Thickness/2])        
+            translate([xy.x,xy.y,z])  rotate(a=[90,0,0]) {
+                cylinder(h=Heat_Insert_Height, d = Heat_Insert_Diameter,$fn = 36);
+                translate([0,0,Heat_Insert_Height-Screw_Thread_Length+Screw_Pocket_Z])cylinder(h=Screw_Thread_Length,d=Heat_Insert_Thread*1.1,$fn = 36);
+                translate([0,0,Screw_Pocket_Z+Heat_Insert_Height])cylinder(h=Side_Thickness-Screw_Pocket_Z+.01,d=Screw_Head_Diameter*1.1,$fn=36);
+                 }
+
+        
         
     }
 }
