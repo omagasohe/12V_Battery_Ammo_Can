@@ -23,7 +23,7 @@
     Cell_Spacing = 2; 
     // The number of cells from latch to hinge
     Core_Columns = 10; 
-
+    Core_Double_Stack = true;
 /* [Strap] */
     //Total thickness of all straps being stacked up.
     Strap_Thickness = 2;
@@ -69,7 +69,7 @@
     Strap_Bot_Z = -(Cell_Lenght/2)-(Strap_Thickness);
 
     //Top to Bottom. This is 2x the number of cells in series. 
-    Core_Rows = 6; //Dont change this.
+    Core_Rows = Core_Double_Stack ? 6:3;
     //Thickness of the Side Covers
     Side_Thickness = (Pack_Depth - (Cell_Lenght+(Strap_Thickness*2)))/2;
 
@@ -103,7 +103,7 @@ difference(){
             rounded_4s_Cube([((Cell_Diameter+Cell_Spacing)*Core_Columns)-Cell_Spacing+Pack_Padding+Pack_Padding, ((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Pack_Padding_Cell_Side+Strap_Thickness],Corner_Radius);
 
         if(Render_Bottom_Cell_Holder)
-        color("PaleGreen") 
+            color("PaleGreen") 
             translate([-(Cell_Diameter/2)-Pack_Padding,-(Cell_Diameter/2)-Pack_Padding,Strap_Bot_Z])
             rounded_4s_Cube([((Cell_Diameter+Cell_Spacing)*Core_Columns)-Cell_Spacing+Pack_Padding+Pack_Padding, ((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Pack_Padding_Cell_Side+Strap_Thickness],Corner_Radius);
        
@@ -123,7 +123,7 @@ difference(){
                         }
             }
         if(Render_Spacer_Bottom)
-        color("OrangeRed")
+         color("OrangeRed")
             translate([((Cell_Diameter+Cell_Spacing)*(Core_Columns-1))-(Cell_Diameter/2)-Pack_Padding,-(Cell_Diameter/2)-Pack_Padding,Strap_Bot_Z-Side_Thickness])
              difference() {
                 rounded_2s_Cube([(Cell_Diameter)+(Pack_Padding*2), ((Cell_Diameter+Cell_Spacing)*Core_Rows)-Cell_Spacing+Pack_Padding+Pack_Padding,Side_Thickness],Corner_Radius);
@@ -139,7 +139,7 @@ difference(){
             }
 
         if(Render_Side_Cover)
-        color("Indigo")
+         color("Indigo")
             translate([-(Cell_Diameter/2)-Pack_Padding-Front_Diff,(-Cell_Diameter/2)-Pack_Padding,Strap_Bot_Z-Side_Thickness])rotate([90,0,0])
             rounded_4s_Cube([Pack_Width,Pack_Depth,Side_Thickness],Corner_Radius); 
 
@@ -216,15 +216,18 @@ difference(){
                 cube([((Cell_Diameter+Cell_Spacing)*(Core_Columns-1))+Strap_Width,Strap_Width,Strap_Thickness]);
 
 
-        //Serial Straps
+         //Serial Straps
+        if(Core_Double_Stack)
         for( z = [Strap_Top_Z,Strap_Bot_Z],  y = [0:(Core_Rows/2)-1], x = [0:Core_Columns-1])
                         color("orange") 
                             translate(v = [(x*(Cell_Diameter+Cell_Spacing))-(Strap_Width/2), (y*(Cell_Diameter+Cell_Spacing)*2)+(Strap_Width/2), z]) 
                             cube([Strap_Width, Cell_Diameter+Cell_Spacing-Strap_Width, Strap_Thickness]);
         //Serial Ties
-        for( y = [0:(Core_Rows/2)-2],  x = [0:Core_Columns-1])
+        
+        for( y = [0:floor((Core_Rows/2)-2)] ,  x = [0:Core_Columns-1])
+            echo(y = y)
             color("green") 
-            translate(v = [(x*(Cell_Diameter+Cell_Spacing))-(Strap_Width/2), (y*(Cell_Diameter+Cell_Spacing)*2)+(Cell_Diameter+Cell_Spacing+(Strap_Width/2)), (y%2==0)?Strap_Top_Z:Strap_Bot_Z]) 
+            translate(v = [(x*(Cell_Diameter+Cell_Spacing))-(Strap_Width/2), (y*(Cell_Diameter+Cell_Spacing)*(Core_Double_Stack?2:1))+(Cell_Diameter+Cell_Spacing+(Strap_Width/2)), (y%2==0)?Strap_Top_Z:Strap_Bot_Z]) 
             cube([Strap_Width, Cell_Diameter+Cell_Spacing-Strap_Width, Strap_Thickness]);
        
         //Wire Reliefs Funky transforms to make this work
